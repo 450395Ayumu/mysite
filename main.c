@@ -1,21 +1,40 @@
-// 基礎プログラミングII SchooMy 衝撃検知センサー
-
 #include <stdio.h>
 
 int main() {
+    int accelValue;
+    int distanceValue;
     int soundValue;
-    int threshold = 120;
+
+    int score;
 
     while (1) {
+        score = 0;
+
+        accelValue = getAccelSensor();
+        distanceValue = getDistanceSensor();
         soundValue = getSoundSensor();
 
-        if (soundValue > threshold) {
-            ledOn();
-            wait(500);
-            ledOff();
-        } else {
-            ledOff();
+        if (accelValue > 150) {
+            score += 2;
         }
+
+        if (soundValue > 120) {
+            score += 2;
+        }
+
+        if (distanceValue < 20) {
+            score += 1;
+        }
+
+        if (score <= 1) {
+            ledOff();
+        } else if (score <= 3) {
+            ledLow();
+        } else {
+            ledHigh();
+        }
+
+        wait(100);
     }
 
     return 0;
